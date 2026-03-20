@@ -280,6 +280,8 @@ class UserHandler
 
     public function createUser(string $username, string $password): array
     {
+        global $DIC;
+
         $new_user = new \ilObjUser();
         $new_user->setTimeLimitOwner(USER_FOLDER_ID);
         $new_user->setTitle($username);
@@ -290,6 +292,8 @@ class UserHandler
         $new_user->setTimeLimitUnlimited(true);
         $new_user_id = $new_user->create();
         $new_user->saveAsNew();
+        $new_user->writePrefs();
+        $DIC->rbac()->admin()->assignUser(4, $new_user_id);
 
         return ['user_id' => $new_user_id];
     }
