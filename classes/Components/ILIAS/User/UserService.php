@@ -399,4 +399,51 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
+    #[OA\Post(
+        path: '/ilias/user/{firstname}/{lastname}/{email}',
+        operationId: "createUserWithEmail",
+        description: 'Creates new user with firstname, lastname and email.',
+        summary: 'Creates new user with firstname, lastname and email.',
+        tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "firstname",
+                description: "Firstname of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            ),
+            new OA\Parameter(
+                name: "lastname",
+                description: "Lastname of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            ),
+            new OA\Parameter(
+                name: "email",
+                description: "Email of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Erfolgreiche Antwort'
+            )
+        ]
+    )]
+    public function createUserWithEmail(): void
+    {
+        $firstname = $this->path_params->getValueByKey('firstname');
+        $lastname = $this->path_params->getValueByKey('lastname');
+        $email = $this->path_params->getValueByKey('email');
+        $handler = new UserHandler();
+        $this->response->setResponseData($handler->createUserWithEmail($firstname, $lastname, $email));
+        $this->response->setResponseCode(200);
+        $this->response->send();
+    }
 }

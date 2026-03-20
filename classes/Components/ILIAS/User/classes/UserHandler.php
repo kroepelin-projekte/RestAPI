@@ -2,6 +2,7 @@
 
 namespace KPG\RestAPI\ILIAS\User\classes;
 
+use ilPasswordAssistanceGUI;
 use KPG\RestAPI\API\Exception\UserNotFoundException;
 use KPG\RestAPI\API\Exception\AttributesNotFoundException;
 use KPG\RestAPI\API\Exception\RoleNotFoundException;
@@ -293,7 +294,50 @@ class UserHandler
         $new_user_id = $new_user->create();
         $new_user->saveAsNew();
         $new_user->writePrefs();
+        $new_user->
         $DIC->rbac()->admin()->assignUser(4, $new_user_id);
+
+        return ['user_id' => $new_user_id];
+    }
+
+    public function createUserWithEmail(string $firstname, string $lastname, string $email): array
+    {
+        global $DIC;
+
+        $username = strtolower($firstname) . '.' . strtolower($lastname);
+
+        $new_user = new \ilObjUser();
+        $new_user->setTimeLimitOwner(USER_FOLDER_ID);
+        $new_user->setTitle($firstname . ' ' . $lastname);
+        $new_user->setDescription('');
+        $new_user->setEmail($email);
+        $new_user->setLogin($username);
+        $generated_password = substr(md5(uniqid(rand(), true)), 0, 14);
+        $new_user->setPasswd($generated_password);
+        $new_user->setActive(true);
+        $new_user->setTimeLimitUnlimited(true);
+        $new_user_id = $new_user->create();
+        $new_user->saveAsNew();
+        $new_user->writePrefs();
+        $DIC->rbac()->admin()->assignUser(4, $new_user_id);
+
+
+        $sender = $DIC->mail()->mime()->senderFactory()->system();
+
+        $mm = new \ilMimeMail();
+        $mm->Subject('Account created');
+        $mm->From($sender);
+        $mm->To($new_user->getEmail());
+        $mm->Body(
+            <<<TXT
+            Herzlich Willkommen bei ILIAS!
+            
+            Ihre Zugangsdaten lauten:
+            Login: $username
+            Passwort: $generated_password
+            TXT
+        );
+        $mm->send();
 
         return ['user_id' => $new_user_id];
     }

@@ -1051,7 +1051,7 @@
                         "description": "ID or username of the user",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -1102,7 +1102,7 @@
                         "description": "ID or username of the user",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 ],
@@ -1848,6 +1848,50 @@
                 "summary": "Description",
                 "description": "Description",
                 "operationId": "userExport",
+                "responses": {
+                    "200": {
+                        "description": "Erfolgreiche Antwort"
+                    }
+                }
+            }
+        },
+        "/ilias/user/{firstname}/{lastname}/{email}": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Creates new user with firstname, lastname and email.",
+                "description": "Creates new user with firstname, lastname and email.",
+                "operationId": "createUserWithEmail",
+                "parameters": [
+                    {
+                        "name": "firstname",
+                        "in": "path",
+                        "description": "Firstname of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "lastname",
+                        "in": "path",
+                        "description": "Lastname of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "Email of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Erfolgreiche Antwort"

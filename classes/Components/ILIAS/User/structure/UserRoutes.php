@@ -91,6 +91,12 @@ $routes = array (
     'http_method' => 'GET',
     'method' => 'userExport',
   ),
+  15 => 
+  array (
+    'route' => '/^\\/ilias\\/user\\/(?P<firstname>[^\\/]+)\\/(?P<lastname>[^\\/]+)\\/(?P<email>[^\\/]+)$/',
+    'http_method' => 'POST',
+    'method' => 'createUserWithEmail',
+  ),
 );
 
 return [
