@@ -73,8 +73,14 @@ class CourseUserHandler
         return array_filter($users);
     }
 
-    public function deleteUser(int $user_id, int $course_ref_id): void
+    public function deleteUser(string|int $user_id_or_username, int $course_ref_id): void
     {
+        if (is_numeric($user_id_or_username)) {
+            $user_id = (int) $user_id_or_username;
+        } else {
+            $user_id = \ilObjUser::_lookupId((string) $user_id_or_username);
+        }
+
         if (!$this->utilHandler->courseExists($course_ref_id)) {
             throw new CourseNotFoundException();
         }

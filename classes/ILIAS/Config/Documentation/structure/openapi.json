@@ -1027,64 +1027,13 @@
                 }
             }
         },
-        "/ilias/course/{ref_id}/users/{user_id}": {
-            "put": {
-                "tags": [
-                    "Course"
-                ],
-                "summary": "Add a user to a course as member",
-                "description": "Adds a user to a course as member",
-                "operationId": "addMember",
-                "parameters": [
-                    {
-                        "name": "ref_id",
-                        "in": "path",
-                        "description": "Ref_id of the course",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "name": "user_id",
-                        "in": "path",
-                        "description": "Id of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "success add user to course"
-                    },
-                    "404": {
-                        "description": "Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "examples": {
-                                    "COURSE_NOT_FOUND": {
-                                        "summary": "COURSE_NOT_FOUND",
-                                        "description": "Course not found"
-                                    },
-                                    "USER_NOT_FOUND": {
-                                        "summary": "USER_NOT_FOUND",
-                                        "description": "User not found"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
+        "/ilias/course/{ref_id}/users/{user_identifier}": {
             "delete": {
                 "tags": [
                     "Course"
                 ],
-                "summary": "Delete a user from a course",
-                "description": "Deletes a user from a course",
+                "summary": "Removes a user from a course by user_id or username.",
+                "description": "Removes a user from a course by user_id or username.",
                 "operationId": "deleteUser",
                 "parameters": [
                     {
@@ -1097,9 +1046,9 @@
                         }
                     },
                     {
-                        "name": "user_id",
+                        "name": "user_identifier",
                         "in": "path",
-                        "description": "Id of the user",
+                        "description": "ID or username of the user",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -1205,6 +1154,59 @@
                 "responses": {
                     "200": {
                         "description": "Erfolgreiche Antwort"
+                    }
+                }
+            }
+        },
+        "/ilias/course/{ref_id}/users/{user_id}": {
+            "put": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Add a user to a course as member",
+                "description": "Adds a user to a course as member",
+                "operationId": "addMember",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "Ref_id of the course",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "Id of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success add user to course"
+                    },
+                    "404": {
+                        "description": "Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "examples": {
+                                    "COURSE_NOT_FOUND": {
+                                        "summary": "COURSE_NOT_FOUND",
+                                        "description": "Course not found"
+                                    },
+                                    "USER_NOT_FOUND": {
+                                        "summary": "USER_NOT_FOUND",
+                                        "description": "User not found"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

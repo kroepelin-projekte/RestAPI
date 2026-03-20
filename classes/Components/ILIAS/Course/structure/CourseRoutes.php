@@ -51,27 +51,27 @@ $routes = array (
   ),
   8 => 
   array (
-    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)$/',
-    'http_method' => 'PUT',
-    'method' => 'addMember',
-  ),
-  9 => 
-  array (
-    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)$/',
+    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_identifier>[^\\/]+)$/',
     'http_method' => 'DELETE',
     'method' => 'deleteUser',
   ),
-  10 => 
+  9 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/property\\/(?P<property>[^\\/]+)$/',
     'http_method' => 'GET',
     'method' => 'getCourseInformation',
   ),
-  11 => 
+  10 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/roles$/',
     'http_method' => 'GET',
     'method' => 'getCourseRoles',
+  ),
+  11 => 
+  array (
+    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)$/',
+    'http_method' => 'PUT',
+    'method' => 'addMember',
   ),
 );
 

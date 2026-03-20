@@ -921,10 +921,10 @@ class CourseService extends BaseService
     }
 
     #[OA\Delete(
-        path: "/ilias/course/{ref_id}/users/{user_id}",
+        path: "/ilias/course/{ref_id}/users/{user_identifier}",
         operationId: "deleteUser",
-        description: "Deletes a user from a course",
-        summary: "Delete a user from a course",
+        description: "Removes a user from a course by user_id or username.",
+        summary: "Removes a user from a course by user_id or username.",
         tags: ["Course"],
         parameters: [
             new OA\Parameter(
@@ -935,8 +935,8 @@ class CourseService extends BaseService
                 schema: new OA\Schema(type: "integer")
             ),
             new OA\Parameter(
-                name: "user_id",
-                description: "Id of the user",
+                name: "user_identifier",
+                description: "ID or username of the user",
                 in: "path",
                 required: true,
                 schema: new OA\Schema(type: "integer")
@@ -969,11 +969,11 @@ class CourseService extends BaseService
     )]
     public function deleteUser(): void
     {
-        $user_id = $this->path_params->getValueByKey('user_id');
+        $user_id_or_username = $this->path_params->getValueByKey('user_identifier');
         $course_ref_id = $this->path_params->getValueByKey('ref_id');
 
         $handler = new CourseUserHandler();
-        $handler->deleteUser($user_id, $course_ref_id);
+        $handler->deleteUser($user_id_or_username, $course_ref_id);
         $this->response->setResponseCode(201);
         $this->response->send();
     }
