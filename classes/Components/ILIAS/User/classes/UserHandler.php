@@ -277,4 +277,20 @@ class UserHandler
     {
         return $this->utilHandler->userExists($user_id);
     }
+
+    public function createUser(string $username, string $password): array
+    {
+        $new_user = new \ilObjUser();
+        $new_user->setTimeLimitOwner(USER_FOLDER_ID);
+        $new_user->setTitle($username);
+        $new_user->setDescription('');
+        $new_user->setLogin($username);
+        $new_user->setPasswd($password);
+        $new_user->setActive(true);
+        $new_user->setTimeLimitUnlimited(true);
+        $new_user_id = $new_user->create();
+        $new_user->saveAsNew();
+
+        return ['user_id' => $new_user_id];
+    }
 }

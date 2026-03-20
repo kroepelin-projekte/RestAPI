@@ -118,6 +118,49 @@
                         "description": "Erfolgreiche Antwort"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Description",
+                "description": "Description",
+                "operationId": "createUser",
+                "requestBody": {
+                    "description": "User creation payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "max.mustermann"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "Secret123!"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "example": {
+                                "username": "max.mustermann",
+                                "password": "Secret123!"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Erfolgreiche Antwort"
+                    }
+                }
             }
         },
         "/ilias/category": {

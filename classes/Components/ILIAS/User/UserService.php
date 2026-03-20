@@ -352,4 +352,51 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
+    #[OA\Post(
+        path: '/ilias/user',
+        operationId: "createUser",
+        description: 'Description',
+        summary: 'Description',
+        requestBody: new OA\RequestBody(
+            description: 'User creation payload',
+            required: true,
+            content: new OA\JsonContent(
+                required: ['username', 'password'],
+                properties: [
+                    new OA\Property(
+                        property: 'username',
+                        type: 'string',
+                        example: 'max.mustermann'
+                    ),
+                    new OA\Property(
+                        property: 'password',
+                        type: 'string',
+                        format: 'password',
+                        example: 'Secret123!'
+                    ),
+                ],
+                example: [
+                    'username' => 'max.mustermann',
+                    'password' => 'Secret123!'
+                ]
+            )
+        ),
+        tags: ["User"],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Erfolgreiche Antwort'
+            )
+        ]
+    )]
+    public function createUser(): void
+    {
+        $username = $this->request_body->getValueByKey('username');
+        $password = $this->request_body->getValueByKey('password');
+        $handler = new UserHandler();
+        $this->response->setResponseData($handler->createUser($username, $password));
+        $this->response->setResponseCode(200);
+        $this->response->send();
+    }
 }
