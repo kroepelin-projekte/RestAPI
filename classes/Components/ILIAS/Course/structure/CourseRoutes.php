@@ -52,16 +52,22 @@ $routes = array (
   8 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)$/',
+    'http_method' => 'PUT',
+    'method' => 'addMember',
+  ),
+  9 => 
+  array (
+    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)$/',
     'http_method' => 'DELETE',
     'method' => 'deleteUser',
   ),
-  9 => 
+  10 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/property\\/(?P<property>[^\\/]+)$/',
     'http_method' => 'GET',
     'method' => 'getCourseInformation',
   ),
-  10 => 
+  11 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/roles$/',
     'http_method' => 'GET',

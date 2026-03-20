@@ -1071,5 +1071,62 @@ class CourseService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
+    #[OA\Put(
+        path: "/ilias/course/{ref_id}/users/{user_id}",
+        operationId: "addMember",
+        description: "Adds a user to a course as member",
+        summary: "Add a user to a course as member",
+        tags: ["Course"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "Ref_id of the course",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "user_id",
+                description: "Id of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "success add user to course"
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Error",
+                content: new OA\JsonContent(
+                    examples: [
+                        new OA\Examples(
+                            example: 'COURSE_NOT_FOUND',
+                            summary: "COURSE_NOT_FOUND",
+                            description: "Course not found"
+                        ),
+                        new OA\Examples(
+                            example: 'USER_NOT_FOUND',
+                            summary: "USER_NOT_FOUND",
+                            description: "User not found"
+                        )
+                    ]
+                )
+            ),
+        ]
+    )]
+    public function addMember(): void
+    {
+        $user_id = $this->path_params->getValueByKey('user_id');
+        $course_ref_id = $this->path_params->getValueByKey('ref_id');
+        $handler = new CourseUserHandler();
+        $handler->addMember($user_id, $course_ref_id);
+        $this->response->setResponseCode(201);
+        $this->response->send();
+    }
 }
 

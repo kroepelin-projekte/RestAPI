@@ -43,6 +43,19 @@ class CourseUserHandler
         $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
     }
 
+    public function addMember(int $user_id, int $course_ref_id): void
+    {
+        if (!$this->utilHandler->courseExists($course_ref_id)) {
+            throw new CourseNotFoundException();
+        }
+        if (!$this->utilHandler->userExists($user_id)) {
+            throw new UserNotFoundException();
+        }
+        $obj_course = new \ilObjCourse($course_ref_id, true);
+        $role_id = $obj_course->getDefaultMemberRole();
+        $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+    }
+
     public function getAllUsers(int $course_ref_id, $default_role = null)
     {
         if (!$this->utilHandler->courseExists($course_ref_id)) {
