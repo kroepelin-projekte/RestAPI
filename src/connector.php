@@ -6,6 +6,10 @@ use KPG\RestAPI\ILIAS\Logger\Logger;
 use KPG\RestAPI\API\HTTP\Request;
 use KPG\RestAPI\API\HTTP\Response;
 
+if (PHP_SAPI === 'cli') {
+    return;
+}
+
 require_once('ILIASInit.php');
 ILIASInit::init();
 

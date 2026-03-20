@@ -4,10 +4,13 @@ namespace KPG\RestAPI\ILIAS;
 
 use ilInitialisation;
 
-chdir("../../../../../../../../");
+if (PHP_SAPI === 'cli') {
+    return;
+}
 
-include_once "Services/Context/classes/class.ilContext.php";
-include_once "Services/Init/classes/class.ilInitialisation.php";
+chdir("../../../../../../../../../");
+
+require_once 'vendor/composer/vendor/autoload.php';
 
 class ILIASInit extends ilInitialisation
 {
