@@ -939,7 +939,7 @@ class CourseService extends BaseService
                 description: "ID or username of the user",
                 in: "path",
                 required: true,
-                schema: new OA\Schema(type: "integer")
+                schema: new OA\Schema(type: "string")
             )
         ],
         responses: [
@@ -1091,7 +1091,7 @@ class CourseService extends BaseService
                 description: "ID or username of the user",
                 in: "path",
                 required: true,
-                schema: new OA\Schema(type: "integer")
+                schema: new OA\Schema(type: "string")
             ),
         ],
         responses: [
