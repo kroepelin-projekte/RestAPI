@@ -43,8 +43,14 @@ class CourseUserHandler
         $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
     }
 
-    public function addMember(int $user_id, int $course_ref_id): void
+    public function addMember(int|string $user_identifier, int $course_ref_id): void
     {
+        if (is_numeric($user_identifier)) {
+            $user_id = (int) $user_identifier;
+        } else {
+            $user_id = \ilObjUser::_lookupId((string) $user_identifier);
+        }
+
         if (!$this->utilHandler->courseExists($course_ref_id)) {
             throw new CourseNotFoundException();
         }

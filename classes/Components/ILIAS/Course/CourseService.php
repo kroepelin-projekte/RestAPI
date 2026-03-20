@@ -1073,10 +1073,10 @@ class CourseService extends BaseService
     }
 
     #[OA\Put(
-        path: "/ilias/course/{ref_id}/users/{user_id}",
+        path: "/ilias/course/{ref_id}/users/{user_identifier}",
         operationId: "addMember",
-        description: "Adds a user to a course as member",
-        summary: "Add a user to a course as member",
+        description: "Adds a user to a course as member by user_id or username.",
+        summary: "Adds a user to a course as member by user_id or username.",
         tags: ["Course"],
         parameters: [
             new OA\Parameter(
@@ -1087,8 +1087,8 @@ class CourseService extends BaseService
                 schema: new OA\Schema(type: "integer")
             ),
             new OA\Parameter(
-                name: "user_id",
-                description: "Id of the user",
+                name: "user_identifier",
+                description: "ID or username of the user",
                 in: "path",
                 required: true,
                 schema: new OA\Schema(type: "integer")
@@ -1121,10 +1121,10 @@ class CourseService extends BaseService
     )]
     public function addMember(): void
     {
-        $user_id = $this->path_params->getValueByKey('user_id');
+        $user_identifier = $this->path_params->getValueByKey('user_identifier');
         $course_ref_id = $this->path_params->getValueByKey('ref_id');
         $handler = new CourseUserHandler();
-        $handler->addMember($user_id, $course_ref_id);
+        $handler->addMember($user_identifier, $course_ref_id);
         $this->response->setResponseCode(201);
         $this->response->send();
     }
