@@ -21,6 +21,7 @@ Composer
 | Plugin Branches | ILIAS Versions | PHP Versions |
 |-----------------|----------------|--------------|
 | release_9       | 9              | 8.1 - 8.2    |
+| release_10      | 10             | 8.2 - 8.3    |
 
 
 ## Installation
@@ -38,7 +39,7 @@ Composer
         RewriteCond %{REQUEST_FILENAME} !-f
         RewriteCond %{REQUEST_FILENAME} !-d
         RewriteCond %{REQUEST_FILENAME} !-l
-        RewriteRule ^/?api/(.*) /Customizing/global/plugins/Services/EventHandling/EventHook/RestAPI/src/connector.php [L]
+        RewriteRule ^/?api/(.*) /public/Customizing/global/plugins/Services/EventHandling/EventHook/RestAPI/src/connector.php [L]
  </Directory>
 ```
 4. Save and Exit

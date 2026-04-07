@@ -81,7 +81,11 @@ class PermissionView implements LangConstant, CMDConstant
                 if (array_key_exists(0, $value_permission) and $value_permission[0] == "") {
                     $value_permission = [];
                 }
-                $multi_select = $this->ui->input()->field()->multiSelect($role['title'], ['GET' => 'GET' ,'POST' => 'POST','PUT' => 'PUT','PATCH' => 'PATCH','DELETE' => 'DELETE']) ->withAdditionalOnLoadCode(
+                $options = ['GET' => 'GET', 'POST' => 'POST', 'PUT' => 'PUT', 'PATCH' => 'PATCH', 'DELETE' => 'DELETE'];
+                if ($name === 'User') {
+                    $options['GET_EXISTS'] = self::getLang(self::LANG_USER_EXISTS_ONLY);
+                }
+                $multi_select = $this->ui->input()->field()->multiSelect($role['title'], $options)->withAdditionalOnLoadCode(
                     fn($id) => <<<JS
                 (function() {
                     const el = document.getElementById('$id');
@@ -89,6 +93,7 @@ class PermissionView implements LangConstant, CMDConstant
                 })();
                 JS
                 )->withValue($value_permission);
+
                 $elements[$role['id']] = $multi_select;
             }
 

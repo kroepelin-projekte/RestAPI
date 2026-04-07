@@ -24,4 +24,5 @@ interface LangConstant
     public const LANG_DEVELOPER_DOCUMENTATION = "lang_developer_documentation";
     public const LANG_ROLE_PERMISSION = "lang_role_permission";
     public const LANG_COMPONENT_PERMISSION = "lang_component_permission";
+    public const LANG_USER_EXISTS_ONLY = "lang_user_exists_only";
 }

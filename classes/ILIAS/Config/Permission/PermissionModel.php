@@ -94,13 +94,14 @@ class PermissionModel
 
         $roles_permission_table = new RolesPermissionTable();
         foreach ($result as $name => $roles) {
-            $permission_string = "";
-            foreach ($roles as $role_id => $role) {
-                if ($role === null) {
+            foreach ($roles as $role_id => $role_data) {
+                if ($role_data === null) {
                     $roles_permission_table->deletePermission($name, $role_id);
                     continue;
                 }
-                $permission_string = implode(',', $role);
+
+                $permissions = $role_data ?? [];
+                $permission_string = implode(',', $permissions);
 
                 if (!$roles_permission_table->insertOrUpdatePermission($name, $role_id, $permission_string)) {
                     return false;

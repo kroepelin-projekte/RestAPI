@@ -74,12 +74,16 @@ class Authenticator
             if ($role_id == "2") {
                 return true;
             }
-            $per = (new PermissionModel())->getCustomPermissionByComponentNameAndRoleID($component_name, $role_id);
-            if (in_array(
-                $http_method,
-                (new PermissionModel())->getCustomPermissionByComponentNameAndRoleID($component_name, $role_id)
-            )) {
+            $permissions = (new PermissionModel())->getCustomPermissionByComponentNameAndRoleID($component_name, $role_id);
+            if (in_array($http_method, $permissions)) {
                 return true;
+            }
+
+            if ($component_name === 'User' && $http_method === 'GET' && in_array('GET_EXISTS', $permissions)) {
+                $requestedUri = urldecode(explode('?', $_SERVER['REQUEST_URI'])[0]);
+                if (preg_match('#^/api/ilias/user/[^/]+/exists$#', $requestedUri)) {
+                    return true;
+                }
             }
         }
 
