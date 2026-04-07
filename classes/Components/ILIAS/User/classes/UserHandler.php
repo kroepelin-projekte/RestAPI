@@ -321,8 +321,9 @@ class UserHandler
         $new_user_id = $new_user->create();
         $new_user->saveAsNew();
         $new_user->writePrefs();
-        $DIC->rbac()->admin()->assignUser(4, $new_user_id);
 
+        $reg_default_role = (int) (new \ilSetting('common'))->get('reg_default_role', '4');
+        $DIC->rbac()->admin()->assignUser($reg_default_role, $new_user_id);
 
         $sender = $DIC->mail()->mime()->senderFactory()->system();
 
