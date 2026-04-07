@@ -1096,7 +1096,7 @@ class CourseService extends BaseService
         ],
         responses: [
             new OA\Response(
-                response: 200,
+                response: 201,
                 description: "success add user to course"
             ),
             new OA\Response(

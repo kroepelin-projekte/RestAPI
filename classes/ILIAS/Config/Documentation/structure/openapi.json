@@ -1119,7 +1119,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "success add user to course"
                     },
                     "404": {
@@ -1893,12 +1893,39 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Checks if user with given id exists.",
+                "description": "Checks if user with given id exists. Returns 200 if user exists, 404 if not.",
                 "operationId": "userExists",
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Erfolgreiche Antwort",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "error_code": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "response_data": {
+                                            "properties": {},
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "status_code": 200,
+                                    "error_code": "",
+                                    "response_data": []
+                                }
+                            }
+                        }
                     }
                 }
             }

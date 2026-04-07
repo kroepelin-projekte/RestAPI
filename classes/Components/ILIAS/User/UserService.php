@@ -1,4 +1,5 @@
 <?php
+
 namespace KPG\RestAPI\Components\ILIAS\User;
 
 
@@ -11,7 +12,6 @@ use KPG\RestAPI\ILIAS\User\classes\UserDataExchangeHandler;
 #[OA\PathItem(
     path: "/ilias/user",
 )]
-
 #[OA\Tag(
     name: "User",
     description: "&nbsp;&nbsp;<b>Sponsor:</b> Kröpelin Projekt GmbH<br />
@@ -46,6 +46,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}',
         operationId: "getUserInformation",
@@ -63,11 +64,12 @@ class UserService extends BaseService
     {
         $user_id = $this->path_params->getValueByKey('user_id');
         $handler = new UserHandler();
-        $user_data =$handler->getUserInformation($user_id);
+        $user_data = $handler->getUserInformation($user_id);
         $this->response->setResponseData($handler->getUserInformation($user_id));
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\Patch(
         path: '/ilias/user/{user_id}',
         operationId: "updateUser",
@@ -90,6 +92,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(201);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/course',
         operationId: "getUserCourses",
@@ -111,6 +114,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/group',
         operationId: "getUserGroups",
@@ -132,6 +136,7 @@ class UserService extends BaseService
         $this->response->setResponseData($handler->getUserGroups($user_id));
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/role',
         operationId: "getUserRoles",
@@ -153,6 +158,7 @@ class UserService extends BaseService
         $this->response->setResponseData($handler->getUserRoles($user_id));
         $this->response->send();
     }
+
     #[OA\Put(
         path: '/ilias/user/{user_id}/role/{role_id}',
         operationId: "addUserRoleEntry",
@@ -169,13 +175,14 @@ class UserService extends BaseService
     public function addUserRoleEntry(): void
     {
         $user_id = $this->path_params->getValueByKey('user_id');
-        $role_id= $this->path_params->getValueByKey('role_id');
+        $role_id = $this->path_params->getValueByKey('role_id');
         $handler = new UserHandler();
         $handler->addUserRole($user_id, $role_id);
         $this->response->setResponseCode(201);
         $this->response->send();
 
     }
+
     #[OA\DELETE(
         path: '/ilias/user/{user_id}/role/{role_id}',
         operationId: "deleteUserRoleEntry",
@@ -192,12 +199,13 @@ class UserService extends BaseService
     public function deleteUserRoleEntry(): void
     {
         $user_id = $this->path_params->getValueByKey('user_id');
-        $role_id= $this->path_params->getValueByKey('role_id');
+        $role_id = $this->path_params->getValueByKey('role_id');
         $handler = new UserHandler();
-         $handler->removeUserRole($user_id, $role_id);
-         $this->response->setResponseCode(201);
-         $this->response->send();
+        $handler->removeUserRole($user_id, $role_id);
+        $this->response->setResponseCode(201);
+        $this->response->send();
     }
+
     #[OA\DELETE(
         path: '/ilias/user/{user_id}',
         operationId: "deleteUser",
@@ -219,6 +227,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(201);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/customfield',
         operationId: "getUserCustomFields",
@@ -240,6 +249,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\Patch(
         path: '/ilias/user/{user_id}/customfield',
         operationId: "setUserCustomFields",
@@ -263,6 +273,7 @@ class UserService extends BaseService
         $this->response->send();
 
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/customfield/{customfield}',
         operationId: "getUserCustomFieldsByCustomFieldName",
@@ -285,16 +296,42 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/exists',
         operationId: "userExists",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Checks if user with given id exists. Returns 200 if user exists, 404 if not.',
+        summary: 'Checks if user with given id exists.',
         tags: ["User"],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Erfolgreiche Antwort',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'status_code',
+                            type: 'integer',
+                            example: 200
+                        ),
+                        new OA\Property(
+                            property: 'error_code',
+                            type: 'string',
+                            example: ''
+                        ),
+                        new OA\Property(
+                            property: 'response_data',
+                            properties: [],
+                            type: 'object',
+                            example: []
+                        ),
+                    ],
+                    example: [
+                        'status_code' => 200,
+                        'error_code' => '',
+                        'response_data' => [],
+                    ]
+                )
             )
         ]
     )]
@@ -302,13 +339,14 @@ class UserService extends BaseService
     {
         $user_id = $this->path_params->getValueByKey('user_id');
         $handler = new UserHandler();
-        if($handler->userExists($user_id)) {
+        if ($handler->userExists($user_id)) {
             $this->response->setResponseCode(200);
         } else {
             $this->response->setResponseCode(404);
         }
         $this->response->send();
     }
+
     #[OA\POST(
         path: '/ilias/user/import',
         operationId: "userImport",
@@ -331,6 +369,7 @@ class UserService extends BaseService
         $this->response->setResponseCode(200);
         $this->response->send();
     }
+
     #[OA\GET(
         path: '/ilias/user/{user_id}/export',
         operationId: "userExport",
