@@ -123,9 +123,9 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
-                "operationId": "createUser",
+                "summary": "Creates new user with firstname, lastname and email.",
+                "description": "Creates new user with firstname, lastname and email.",
+                "operationId": "createUserWithEmail",
                 "requestBody": {
                     "description": "User creation payload",
                     "required": true,
@@ -133,32 +133,95 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "username",
-                                    "password"
+                                    "firstname",
+                                    "lastname",
+                                    "email"
                                 ],
                                 "properties": {
-                                    "username": {
+                                    "firstname": {
                                         "type": "string",
-                                        "example": "max.mustermann"
+                                        "example": "max"
                                     },
-                                    "password": {
+                                    "lastname": {
                                         "type": "string",
-                                        "format": "password",
-                                        "example": "Secret123!"
+                                        "example": "mustermann"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "max.mustermann@example.de"
                                     }
                                 },
                                 "type": "object"
                             },
                             "example": {
-                                "username": "max.mustermann",
-                                "password": "Secret123!"
+                                "firstname": "max",
+                                "lastname": "mustermann",
+                                "email": "max.mustermann@example.de"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Erfolgreiche Antwort",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status_code": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "error_code": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "response_data": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 123
+                                                },
+                                                "username": {
+                                                    "type": "string",
+                                                    "example": "max.mustermann"
+                                                }
+                                            },
+                                            "type": "object",
+                                            "example": {
+                                                "user_id": 123,
+                                                "username": "max.mustermann"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                }
+                                            },
+                                            "type": "object",
+                                            "example": {
+                                                "total": 2
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "example": {
+                                    "status_code": 200,
+                                    "error_code": "",
+                                    "response_data": {
+                                        "user_id": 123,
+                                        "username": "max.mustermann"
+                                    },
+                                    "meta": {
+                                        "total": 2
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1848,50 +1911,6 @@
                 "summary": "Description",
                 "description": "Description",
                 "operationId": "userExport",
-                "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
-                    }
-                }
-            }
-        },
-        "/ilias/user/{firstname}/{lastname}/{email}": {
-            "post": {
-                "tags": [
-                    "User"
-                ],
-                "summary": "Creates new user with firstname, lastname and email.",
-                "description": "Creates new user with firstname, lastname and email.",
-                "operationId": "createUserWithEmail",
-                "parameters": [
-                    {
-                        "name": "firstname",
-                        "in": "path",
-                        "description": "Firstname of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "lastname",
-                        "in": "path",
-                        "description": "Lastname of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "email",
-                        "in": "path",
-                        "description": "Email of the user",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "Erfolgreiche Antwort"

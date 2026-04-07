@@ -2,13 +2,15 @@
 
 namespace KPG\RestAPI\ILIAS\User\classes;
 
-use ilPasswordAssistanceGUI;
 use KPG\RestAPI\API\Exception\UserNotFoundException;
 use KPG\RestAPI\API\Exception\AttributesNotFoundException;
 use KPG\RestAPI\API\Exception\RoleNotFoundException;
+use KPG\RestAPI\ILIAS\Util\Language;
 
 class UserHandler
 {
+    use Language;
+
     private $DIC;
     private UserUtilHandler $utilHandler;
 
@@ -325,20 +327,15 @@ class UserHandler
         $sender = $DIC->mail()->mime()->senderFactory()->system();
 
         $mm = new \ilMimeMail();
-        $mm->Subject('Account created');
+        $mm->Subject(self::getLang('lang_new_user_email_subject'));
         $mm->From($sender);
         $mm->To($new_user->getEmail());
-        $mm->Body(
-            <<<TXT
-            Herzlich Willkommen bei ILIAS!
-            
-            Ihre Zugangsdaten lauten:
-            Login: $username
-            Passwort: $generated_password
-            TXT
-        );
+        $mm->Body(sprintf(stripcslashes(self::getLang('lang_new_user_email')), $username, $generated_password));
         $mm->send();
 
-        return ['user_id' => $new_user_id];
+        return [
+            'user_id' => $new_user_id,
+            'username' => $username,
+        ];
     }
 }

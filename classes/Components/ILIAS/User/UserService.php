@@ -353,7 +353,7 @@ class UserService extends BaseService
         $this->response->send();
     }
 
-    #[OA\Post(
+/*    #[OA\Post(
         path: '/ilias/user',
         operationId: "createUser",
         description: 'Description',
@@ -398,49 +398,115 @@ class UserService extends BaseService
         $this->response->setResponseData($handler->createUser($username, $password));
         $this->response->setResponseCode(200);
         $this->response->send();
-    }
+    }*/
 
     #[OA\Post(
-        path: '/ilias/user/{firstname}/{lastname}/{email}',
+        path: '/ilias/user',
         operationId: "createUserWithEmail",
         description: 'Creates new user with firstname, lastname and email.',
         summary: 'Creates new user with firstname, lastname and email.',
+        requestBody: new OA\RequestBody(
+            description: 'User creation payload',
+            required: true,
+            content: new OA\JsonContent(
+                required: ['firstname', 'lastname', 'email'],
+                properties: [
+                    new OA\Property(
+                        property: 'firstname',
+                        type: 'string',
+                        example: 'max'
+                    ),
+                    new OA\Property(
+                        property: 'lastname',
+                        type: 'string',
+                        example: 'mustermann'
+                    ),
+                    new OA\Property(
+                        property: 'email',
+                        type: 'string',
+                        format: 'email',
+                        example: 'max.mustermann@example.de'
+                    ),
+                ],
+                example: [
+                    'firstname' => 'max',
+                    'lastname' => 'mustermann',
+                    'email' => 'max.mustermann@example.de'
+                ]
+            )
+        ),
         tags: ["User"],
-        parameters: [
-            new OA\Parameter(
-                name: "firstname",
-                description: "Firstname of the user",
-                in: "path",
-                required: true,
-                schema: new OA\Schema(type: "string")
-            ),
-            new OA\Parameter(
-                name: "lastname",
-                description: "Lastname of the user",
-                in: "path",
-                required: true,
-                schema: new OA\Schema(type: "string")
-            ),
-            new OA\Parameter(
-                name: "email",
-                description: "Email of the user",
-                in: "path",
-                required: true,
-                schema: new OA\Schema(type: "string")
-            ),
-        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Erfolgreiche Antwort',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'status_code',
+                            type: 'integer',
+                            example: 200
+                        ),
+                        new OA\Property(
+                            property: 'error_code',
+                            type: 'string',
+                            example: ''
+                        ),
+                        new OA\Property(
+                            property: 'response_data',
+                            properties: [
+                                new OA\Property(
+                                    property: 'user_id',
+                                    type: 'integer',
+                                    example: 123
+                                ),
+                                new OA\Property(
+                                    property: 'username',
+                                    type: 'string',
+                                    example: 'max.mustermann'
+                                ),
+                            ],
+                            type: 'object',
+                            example: [
+                                'user_id' => 123,
+                                'username' => 'max.mustermann'
+                            ]
+                        ),
+                        new OA\Property(
+                            property: 'meta',
+                            properties: [
+                                new OA\Property(
+                                    property: 'total',
+                                    type: 'integer',
+                                    example: 2
+                                ),
+                            ],
+                            type: 'object',
+                            example: [
+                                'total' => 2
+                            ]
+                        ),
+                    ],
+                    example: [
+                        'status_code' => 200,
+                        'error_code' => '',
+                        'response_data' => [
+                            'user_id' => 123,
+                            'username' => 'max.mustermann'
+                        ],
+                        'meta' => [
+                            'total' => 2
+                        ]
+                    ]
+                )
             )
         ]
     )]
     public function createUserWithEmail(): void
     {
-        $firstname = $this->path_params->getValueByKey('firstname');
-        $lastname = $this->path_params->getValueByKey('lastname');
-        $email = $this->path_params->getValueByKey('email');
+        $firstname = $this->request_body->getValueByKey('firstname');
+        $lastname = $this->request_body->getValueByKey('lastname');
+        $email = $this->request_body->getValueByKey('email');
         $handler = new UserHandler();
         $this->response->setResponseData($handler->createUserWithEmail($firstname, $lastname, $email));
         $this->response->setResponseCode(200);

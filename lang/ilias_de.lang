@@ -18,3 +18,5 @@ lang_link_to_documentation_byline#:#Dieser Link zeigt die Dokumentation, gefilte
 lang_developer_documentation#:#Entwickler Dokumentation
 lang_role_permission#:#Rollenberechtigung
 lang_component_permission#:#Komponentenberechtigung
+lang_new_user_email_subject#:#Ihr ILIAS Benutzerkonto
+lang_new_user_email#:#Herzlich Willkommen bei ILIAS!\n\nIhre Zugangsdaten lauten:\n\nLogin: %s\nPasswort: %s
