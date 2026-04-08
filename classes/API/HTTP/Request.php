@@ -16,7 +16,17 @@ class Request
     {
         $auth = new Authenticator();
         $reponse = new Response();
-        $requestedUri = urldecode(str_replace($this->path_api, '', explode('?', $_SERVER['REQUEST_URI'])[0]));
+
+        $fullUri = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $apiPosition = strpos($fullUri, $this->path_api);
+
+        if ($apiPosition === false) {
+            $reponse->send404();
+            return;
+        }
+
+        $requestedUri = urldecode(substr($fullUri, $apiPosition + strlen($this->path_api)));
+
         Logger::setRequestUrl($requestedUri);
         Logger::setHttpMethod($_SERVER['REQUEST_METHOD']);
         $requestedUri = rtrim($requestedUri, '/');
