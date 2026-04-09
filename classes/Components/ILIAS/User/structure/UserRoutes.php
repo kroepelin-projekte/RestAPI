@@ -87,6 +87,12 @@ $routes = array (
   ),
   14 => 
   array (
+    'route' => '/^\\/ilias\\/user\\/import$/',
+    'http_method' => 'POST',
+    'method' => 'userImport',
+  ),
+  15 => 
+  array (
     'route' => '/^\\/ilias\\/user\\/(?P<user_id>[^\\/]+)\\/export$/',
     'http_method' => 'GET',
     'method' => 'userExport',

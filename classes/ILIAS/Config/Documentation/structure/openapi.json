@@ -1930,6 +1930,21 @@
                 }
             }
         },
+        "/ilias/user/import": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Description",
+                "description": "Description",
+                "operationId": "userImport",
+                "responses": {
+                    "200": {
+                        "description": "Erfolgreiche Antwort"
+                    }
+                }
+            }
+        },
         "/ilias/user/{user_id}/export": {
             "get": {
                 "tags": [

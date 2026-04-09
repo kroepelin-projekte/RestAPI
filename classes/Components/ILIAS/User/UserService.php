@@ -347,7 +347,7 @@ class UserService extends BaseService
         $this->response->send();
     }
 
-    #[OA\POST(
+    #[OA\Post(
         path: '/ilias/user/import',
         operationId: "userImport",
         description: 'Description',
