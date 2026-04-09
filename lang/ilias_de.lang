@@ -19,5 +19,4 @@ lang_developer_documentation#:#Entwickler Dokumentation
 lang_role_permission#:#Rollenberechtigung
 lang_component_permission#:#Komponentenberechtigung
 lang_user_exists_only#:#Erlaube /ilias/user/exists
-lang_new_user_email_subject#:#Ihr ILIAS Benutzerkonto
-lang_new_user_email#:#Herzlich Willkommen bei ILIAS!\n\nIhre Zugangsdaten lauten:\n\nLogin: %s\nPasswort: %s
+lang_new_user_email#:#Ihre Zugangsdaten lauten:\n\nLogin: %s\nPasswort: %s

@@ -332,16 +332,23 @@ class UserHandler
         $new_user->saveAsNew();
         $new_user->writePrefs();
 
+        // Give default global role to user
         $reg_default_role = (int) $settings->get('reg_default_role', '4');
         $DIC->rbac()->admin()->assignUser($reg_default_role, $new_user_id);
 
+        // Prepare new account mail
         $sender = $DIC->mail()->mime()->senderFactory()->system();
+        $new_account_mail =  \ilObjUserFolder::_lookupNewAccountMail($lang_key);
+        $subject = $new_account_mail['subject'];
+        $parsed_body = str_replace('{{MAIL_SALUTATION}}', $new_account_mail['sal_g'], $new_account_mail['body']);
+        $body = $parsed_body . "\n\n" . sprintf(stripcslashes($this->lng('lang_new_user_email', $lang_key, $plugin)), $username, $generated_password);
 
+        // Send new account mail
         $mm = new \ilMimeMail();
-        $mm->Subject($this->lng('lang_new_user_email_subject', $lang_key, $plugin));
+        $mm->Subject($subject);
         $mm->From($sender);
         $mm->To($new_user->getEmail());
-        $mm->Body(sprintf(stripcslashes($this->lng('lang_new_user_email', $lang_key, $plugin)), $username, $generated_password));
+        $mm->Body($body);
         $mm->send();
 
         return [

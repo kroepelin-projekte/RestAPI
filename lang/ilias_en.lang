@@ -19,5 +19,4 @@ lang_developer_documentation#:#Developer Documentation
 lang_role_permission#:#Role Permission
 lang_component_permission#:#Component Permission
 lang_user_exists_only#:#Allow /ilias/user/exists
-lang_new_user_email_subject#:#Your new ILIAS account
-lang_new_user_email#:#Welcome to ILIAS!\n\nYour username is: %s\nYour password is: %s
+lang_new_user_email#:#Your username is: %s\nYour password is: %s
