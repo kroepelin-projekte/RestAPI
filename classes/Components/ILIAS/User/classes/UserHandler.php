@@ -340,8 +340,15 @@ class UserHandler
         $sender = $DIC->mail()->mime()->senderFactory()->system();
         $new_account_mail =  \ilObjUserFolder::_lookupNewAccountMail($lang_key);
         $subject = $new_account_mail['subject'];
-        $parsed_body = str_replace('{{MAIL_SALUTATION}}', $new_account_mail['sal_g'], $new_account_mail['body']);
-        $body = $parsed_body . "\n\n" . sprintf(stripcslashes($this->lng('lang_new_user_email', $lang_key, $plugin)), $username, $generated_password);
+
+        $body = $new_account_mail['body'];
+        $body = str_replace('{{MAIL_SALUTATION}}', $new_account_mail['sal_g'], $body);
+        $body = str_replace('{{FIRST_NAME}}', $firstname, $body);
+        $body = str_replace('{{LAST_NAME}}', $lastname, $body);
+        $body = str_replace('{{EMAIL}}', $email, $body);
+        $body = str_replace('{{LOGIN}}', $username, $body);
+        $body = str_replace('{{PASSWORD}}', $generated_password, $body);
+        $body = str_replace('{{ILIAS_URL}}', strstr(ILIAS_HTTP_PATH, '/api', true), $body);
 
         // Send new account mail
         $mm = new \ilMimeMail();
