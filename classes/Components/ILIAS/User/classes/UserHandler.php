@@ -2,6 +2,7 @@
 
 namespace KPG\RestAPI\ILIAS\User\classes;
 
+use KPG\RestAPI\API\Exception\UserLoginExistsException;
 use KPG\RestAPI\API\Exception\UserNotFoundException;
 use KPG\RestAPI\API\Exception\AttributesNotFoundException;
 use KPG\RestAPI\API\Exception\RoleNotFoundException;
@@ -306,7 +307,15 @@ class UserHandler
     {
         global $DIC;
 
+        $settings = new \ilSetting('common');
+        $lang_key = $settings->get('language', 'en');
+        $plugin = \ilObjectPlugin::getPluginObjectByType('KPG_REST_API');
+
         $username = strtolower($firstname) . '.' . strtolower($lastname);
+
+        if (\ilObjUser::_loginExists($username)) {
+            throw new UserLoginExistsException();
+        }
 
         $new_user = new \ilObjUser();
         $new_user->setTimeLimitOwner(USER_FOLDER_ID);
@@ -314,6 +323,7 @@ class UserHandler
         $new_user->setDescription('');
         $new_user->setEmail($email);
         $new_user->setLogin($username);
+        $new_user->setLanguage($lang_key);
         $generated_password = substr(md5(uniqid(rand(), true)), 0, 14);
         $new_user->setPasswd($generated_password);
         $new_user->setActive(true);
@@ -322,21 +332,31 @@ class UserHandler
         $new_user->saveAsNew();
         $new_user->writePrefs();
 
-        $reg_default_role = (int) (new \ilSetting('common'))->get('reg_default_role', '4');
+        $reg_default_role = (int) $settings->get('reg_default_role', '4');
         $DIC->rbac()->admin()->assignUser($reg_default_role, $new_user_id);
 
         $sender = $DIC->mail()->mime()->senderFactory()->system();
 
         $mm = new \ilMimeMail();
-        $mm->Subject(self::getLang('lang_new_user_email_subject'));
+        $mm->Subject($this->lng('lang_new_user_email_subject', $lang_key, $plugin));
         $mm->From($sender);
         $mm->To($new_user->getEmail());
-        $mm->Body(sprintf(stripcslashes(self::getLang('lang_new_user_email')), $username, $generated_password));
+        $mm->Body(sprintf(stripcslashes($this->lng('lang_new_user_email', $lang_key, $plugin)), $username, $generated_password));
         $mm->send();
 
         return [
             'user_id' => $new_user_id,
             'username' => $username,
         ];
+    }
+
+    private function lng(string $variable, string $lang_id, \ilPlugin $plugin_object): string
+    {
+        $id = $plugin_object->getId();
+        $slot = $plugin_object->getPluginInfo()->getPluginSlot()->getId();
+        $component = $plugin_object->getPluginInfo()->getPluginSlot()->getComponent()->getId();
+
+        $plugin_prefix = $component . "_" . $slot . '_' . $id;
+        return \ilLanguage::_lookupEntry($lang_id, $plugin_prefix, $plugin_prefix . '_' . $variable);
     }
 }

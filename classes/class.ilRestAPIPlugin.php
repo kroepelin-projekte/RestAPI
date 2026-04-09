@@ -33,4 +33,9 @@ class ilRestAPIPlugin extends ilEventHookPlugin
     {
         (new KPG\RestAPI\ILIAS\Setup\DatabaseSetup())->uninstall();
     }
+
+    public function getPluginInfo(): ilPluginInfo
+    {
+        return parent::getPluginInfo();
+    }
 }
