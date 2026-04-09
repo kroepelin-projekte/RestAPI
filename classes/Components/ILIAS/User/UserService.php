@@ -298,10 +298,10 @@ class UserService extends BaseService
     }
 
     #[OA\GET(
-        path: '/ilias/user/{user_id}/exists',
+        path: '/ilias/user/{user_identifier}/exists',
         operationId: "userExists",
-        description: 'Checks if user with given id exists. Returns 200 if user exists, 404 if not.',
-        summary: 'Checks if user with given id exists.',
+        description: 'Checks if user with given id or username exists. Returns 200 if user exists, 404 if not.',
+        summary: 'Checks if user with given id or username exists.',
         tags: ["User"],
         responses: [
             new OA\Response(
@@ -337,9 +337,21 @@ class UserService extends BaseService
     )]
     public function userExists(): void
     {
-        $user_id = $this->path_params->getValueByKey('user_id');
+        $user_identifier = $this->path_params->getValueByKey('user_identifier');
+
         $handler = new UserHandler();
-        if ($handler->userExists($user_id)) {
+        if ($handler->userExists($user_identifier)) {
+
+            $response_data = [];
+            if (is_numeric($user_identifier)) {
+                $response_data['username'] = \ilObjUser::_lookupLogin((int) $user_identifier);
+                $response_data['user_id'] = (int) $user_identifier;
+            } else {
+                $response_data['username'] = (string) $user_identifier;
+                $response_data['user_id'] = \ilObjUser::_lookupId((string) $user_identifier);
+            }
+
+            $this->response->setResponseData($response_data);
             $this->response->setResponseCode(200);
         } else {
             $this->response->setResponseCode(404);

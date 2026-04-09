@@ -81,7 +81,7 @@ $routes = array (
   ),
   13 => 
   array (
-    'route' => '/^\\/ilias\\/user\\/(?P<user_id>[^\\/]+)\\/exists$/',
+    'route' => '/^\\/ilias\\/user\\/(?P<user_identifier>[^\\/]+)\\/exists$/',
     'http_method' => 'GET',
     'method' => 'userExists',
   ),

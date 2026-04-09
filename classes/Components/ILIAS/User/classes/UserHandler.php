@@ -277,9 +277,9 @@ class UserHandler
         return $field_value;
     }
 
-    public function userExists(int $user_id): bool
+    public function userExists(int|string $user_identifier): bool
     {
-        return $this->utilHandler->userExists($user_id);
+        return $this->utilHandler->userExists($user_identifier);
     }
 
     public function createUser(string $username, string $password): array
