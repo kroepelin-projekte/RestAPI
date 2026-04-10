@@ -81,7 +81,7 @@ class Authenticator
 
             if ($component_name === 'User' && $http_method === 'GET' && in_array('GET_EXISTS', $permissions)) {
                 $requestedUri = urldecode(explode('?', $_SERVER['REQUEST_URI'])[0]);
-                if (preg_match('#^/api/ilias/user/[^/]+/exists$#', $requestedUri)) {
+                if (preg_match('#/api/ilias/user/[^/]+/exists$#', $requestedUri)) {
                     return true;
                 }
             }
