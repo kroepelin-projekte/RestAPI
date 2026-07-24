@@ -29,13 +29,25 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user',
         operationId: "getAllUsers",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of all users in the system.',
+        summary: 'Get all users',
         tags: ["User"],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'user_id', type: 'integer', example: 6),
+                            new OA\Property(property: 'login', type: 'string', example: 'root'),
+                            new OA\Property(property: 'firstname', type: 'string', example: 'Admin'),
+                            new OA\Property(property: 'lastname', type: 'string', example: 'ILIAS')
+                        ],
+                        type: 'object'
+                    )
+                )
             )
         ]
     )]
@@ -50,13 +62,36 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}',
         operationId: "getUserInformation",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns detailed information for a specific user.',
+        summary: 'Get user information',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'usr_id', type: 'integer', example: 6),
+                        new OA\Property(property: 'login', type: 'string', example: 'root'),
+                        new OA\Property(property: 'firstname', type: 'string', example: 'Admin'),
+                        new OA\Property(property: 'lastname', type: 'string', example: 'ILIAS'),
+                        new OA\Property(property: 'email', type: 'string', format: 'email', example: 'root@localhost')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -73,13 +108,38 @@ class UserService extends BaseService
     #[OA\Patch(
         path: '/ilias/user/{user_id}',
         operationId: "updateUser",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Updates information for a specific user.',
+        summary: 'Update user',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            description: 'User data to update',
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                example: [
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'john.doe@example.com'
+                ]
+            )
+        ),
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'User updated successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -96,13 +156,41 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/course',
         operationId: "getUserCourses",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of courses the user is enrolled in.',
+        summary: 'Get user courses',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'ref_id', type: 'integer', example: 123),
+                            new OA\Property(property: 'title', type: 'string', example: 'Introduction to ILIAS'),
+                            new OA\Property(
+                                property: 'user_role',
+                                type: 'array',
+                                items: new OA\Items(type: 'string', example: 'Member')
+                            )
+                        ],
+                        type: 'object'
+                    )
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -118,13 +206,41 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/group',
         operationId: "getUserGroups",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of groups the user belongs to.',
+        summary: 'Get user groups',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'ref_id', type: 'integer', example: 456),
+                            new OA\Property(property: 'title', type: 'string', example: 'Study Group A'),
+                            new OA\Property(
+                                property: 'user_role',
+                                type: 'array',
+                                items: new OA\Items(type: 'string', example: 'Member')
+                            )
+                        ],
+                        type: 'object'
+                    )
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -140,13 +256,33 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/role',
         operationId: "getUserRoles",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of roles assigned to the user.',
+        summary: 'Get user roles',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: '2', type: 'string', example: 'Guest'),
+                        new OA\Property(property: '4', type: 'string', example: 'User')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -162,13 +298,33 @@ class UserService extends BaseService
     #[OA\Put(
         path: '/ilias/user/{user_id}/role/{role_id}',
         operationId: "addUserRoleEntry",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Assigns a specific role to a user.',
+        summary: 'Add user role',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "role_id",
+                description: "The ID of the role to assign",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Role assigned successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User or role not found'
             )
         ]
     )]
@@ -186,13 +342,33 @@ class UserService extends BaseService
     #[OA\DELETE(
         path: '/ilias/user/{user_id}/role/{role_id}',
         operationId: "deleteUserRoleEntry",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Removes a specific role from a user.',
+        summary: 'Remove user role',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "role_id",
+                description: "The ID of the role to remove",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Role removed successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User or role assignment not found'
             )
         ]
     )]
@@ -209,13 +385,26 @@ class UserService extends BaseService
     #[OA\DELETE(
         path: '/ilias/user/{user_id}',
         operationId: "deleteUser",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Deletes a specific user from the system.',
+        summary: 'Delete user',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'User deleted successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -231,13 +420,33 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/customfield',
         operationId: "getUserCustomFields",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns all custom user fields and their values for a specific user.',
+        summary: 'Get user custom fields',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'f_1', type: 'string', example: 'Some value'),
+                        new OA\Property(property: 'f_2', type: 'string', example: 'Another value')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -253,13 +462,36 @@ class UserService extends BaseService
     #[OA\Patch(
         path: '/ilias/user/{user_id}/customfield',
         operationId: "setUserCustomFields",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Sets or updates custom field values for a user.',
+        summary: 'Set user custom fields',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            description: 'Custom fields data',
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                example: [
+                    'my_custom_field' => 'some value'
+                ]
+            )
+        ),
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Custom fields updated successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]
@@ -277,13 +509,33 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/customfield/{customfield}',
         operationId: "getUserCustomFieldsByCustomFieldName",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns the value of a specific custom field for a user.',
+        summary: 'Get user custom field by name',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "customfield",
+                description: "The name of the custom field",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User or custom field not found'
             )
         ]
     )]
@@ -362,13 +614,44 @@ class UserService extends BaseService
     #[OA\Post(
         path: '/ilias/user/import',
         operationId: "userImport",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Imports multiple users from a JSON payload.',
+        summary: 'Import users',
         tags: ["User"],
+        requestBody: new OA\RequestBody(
+            description: 'List of users to import',
+            required: true,
+            content: new OA\JsonContent(
+                type: 'array',
+                items: new OA\Items(
+                    properties: [
+                        new OA\Property(property: 'login', type: 'string', example: 'jdoe'),
+                        new OA\Property(property: 'passwd', type: 'string', example: 'password123'),
+                        new OA\Property(property: 'firstname', type: 'string', example: 'John'),
+                        new OA\Property(property: 'lastname', type: 'string', example: 'Doe'),
+                        new OA\Property(property: 'email', type: 'string', format: 'email', example: 'john.doe@example.com'),
+                        new OA\Property(
+                            property: 'roles',
+                            type: 'array',
+                            items: new OA\Items(type: 'integer', example: 4)
+                        ),
+                        new OA\Property(
+                            property: 'userdefineddata',
+                            type: 'object',
+                            example: ['f_1' => 'Value']
+                        )
+                    ],
+                    type: 'object'
+                )
+            )
+        ),
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Users imported successfully',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(type: 'integer', example: 124)
+                )
             )
         ]
     )]
@@ -385,13 +668,48 @@ class UserService extends BaseService
     #[OA\GET(
         path: '/ilias/user/{user_id}/export',
         operationId: "userExport",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Exports user data for a specific user.',
+        summary: 'Export user',
         tags: ["User"],
+        parameters: [
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'login', type: 'string', example: 'jdoe'),
+                            new OA\Property(property: 'firstname', type: 'string', example: 'John'),
+                            new OA\Property(property: 'lastname', type: 'string', example: 'Doe'),
+                            new OA\Property(property: 'email', type: 'string', example: 'john.doe@example.com'),
+                            new OA\Property(
+                                property: 'roles',
+                                type: 'array',
+                                items: new OA\Items(type: 'integer', example: 4)
+                            ),
+                            new OA\Property(
+                                property: 'userdefineddata',
+                                type: 'object',
+                                example: ['f_1' => 'Value']
+                            )
+                        ],
+                        type: 'object'
+                    )
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'User not found'
             )
         ]
     )]

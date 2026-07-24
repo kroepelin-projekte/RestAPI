@@ -26,13 +26,37 @@ class RepositoryService extends BaseService
     #[OA\Get(
         path: '/ilias/repository/{ref_id}',
         operationId: "objectInformation",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns basic information about a repository object.',
+        summary: 'Get object information',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'title', type: 'string', example: 'My Course'),
+                        new OA\Property(property: 'description', type: 'string', example: 'A course description'),
+                        new OA\Property(property: 'object_id', type: 'integer', example: 1234),
+                        new OA\Property(property: 'ref_id', type: 'integer', example: 123),
+                        new OA\Property(property: 'type', type: 'string', example: 'crs'),
+                        new OA\Property(property: 'owner_name', type: 'string', example: 'Admin ILIAS')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -48,13 +72,26 @@ class RepositoryService extends BaseService
     #[OA\Get(
         path: '/ilias/repository/{ref_id}/exists',
         operationId: "objectExists",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Checks if a repository object with the given reference ID exists.',
+        summary: 'Check if object exists',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Object exists'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object does not exist'
             )
         ]
     )]
@@ -73,13 +110,26 @@ class RepositoryService extends BaseService
     #[OA\Get(
         path: '/ilias/repository/{ref_id}/type',
         operationId: "getObjectType",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns the type of a repository object (e.g., crs, grp, fold).',
+        summary: 'Get object type',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -97,13 +147,26 @@ class RepositoryService extends BaseService
     #[OA\Delete(
         path: '/ilias/repository/{ref_id}',
         operationId: "deleteObject",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Deletes a repository object.',
+        summary: 'Delete object',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object to delete",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Object deleted successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -118,13 +181,26 @@ class RepositoryService extends BaseService
     #[OA\Get(
         path: '/ilias/repository/{ref_id}/parent',
         operationId: "getParent",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns the parent reference ID of an object.',
+        summary: 'Get parent object',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -140,13 +216,26 @@ class RepositoryService extends BaseService
     #[OA\Get(
         path: '/ilias/repository/{ref_id}/childrens',
         operationId: "getChildren",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of all children (sub-objects) of a repository object.',
+        summary: 'Get child objects',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -164,13 +253,33 @@ class RepositoryService extends BaseService
     #[OA\PUT(
         path: '/ilias/repository/{ref_id}/copy/{target_ref_id}',
         operationId: "copyObject",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Copies a repository object to a target location.',
+        summary: 'Copy object',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object to copy",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "target_ref_id",
+                description: "The reference ID of the target location",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Object copied successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Source or target location not found'
             )
         ]
     )]
@@ -192,13 +301,26 @@ class RepositoryService extends BaseService
     #[OA\GET(
         path: '/ilias/repository/{ref_id}/advancedmetadata',
         operationId: "getAdvancedMetaData",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns advanced meta data for a repository object.',
+        summary: 'Get advanced meta data',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -214,13 +336,26 @@ class RepositoryService extends BaseService
     #[OA\GET(
         path: '/ilias/repository/{ref_id}/learninghistory/users',
         operationId: "getLearningHistoryUsers",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns the learning progress/history for all users in a repository object.',
+        summary: 'Get learning history for users',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object not found'
             )
         ]
     )]
@@ -236,13 +371,33 @@ class RepositoryService extends BaseService
     #[OA\GET(
         path: '/ilias/repository/{ref_id}/learninghistory/users/{user_id}',
         operationId: "getLearningHistoryByUserID",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns the learning progress/history for a specific user in a repository object.',
+        summary: 'Get user learning history',
         tags: ["Repository"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the object",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Object or user not found'
             )
         ]
     )]

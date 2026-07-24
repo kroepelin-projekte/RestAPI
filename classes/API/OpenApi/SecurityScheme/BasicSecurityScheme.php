@@ -4,8 +4,9 @@ namespace KPG\RestAPI\API\OpenApi\SecurityScheme;
 use OpenApi\Attributes as OA;
 
 #[OA\SecurityScheme(
-    securityScheme: "basic",
+    securityScheme: "basicAuth",
     type: "http",
-    description: "The username and password to authenticate with the API."
+    scheme: "basic",
+    description: "Standard HTTP Basic Authentication using ILIAS credentials."
 )]
 final class BasicSecurityScheme{}

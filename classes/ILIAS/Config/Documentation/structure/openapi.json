@@ -5,6 +5,12 @@
         "description": "Describes the various components and endpoints of the ILIAS REST API.",
         "version": "1.0.0"
     },
+    "servers": [
+        {
+            "url": "/api",
+            "description": "Relative URL to the API"
+        }
+    ],
     "paths": {
         "/kpg/category": {},
         "/ilias/course": {
@@ -95,12 +101,40 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get all tests",
+                "description": "Returns a list of all tests available in the system.",
                 "operationId": "getAllTests",
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ref_id": {
+                                                "type": "integer",
+                                                "example": 789
+                                            },
+                                            "obj_id": {
+                                                "type": "integer",
+                                                "example": 12345
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Final Exam"
+                                            },
+                                            "parent_id": {
+                                                "type": "integer",
+                                                "example": 123
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -110,12 +144,40 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get all users",
+                "description": "Returns a list of all users in the system.",
                 "operationId": "getAllUsers",
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "user_id": {
+                                                "type": "integer",
+                                                "example": 6
+                                            },
+                                            "login": {
+                                                "type": "string",
+                                                "example": "root"
+                                            },
+                                            "firstname": {
+                                                "type": "string",
+                                                "example": "Admin"
+                                            },
+                                            "lastname": {
+                                                "type": "string",
+                                                "example": "ILIAS"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
@@ -1199,8 +1261,8 @@
                 "tags": [
                     "Course"
                 ],
-                "summary": "DESCRIPTION",
-                "description": "DESCRIPTION",
+                "summary": "Get specific course property",
+                "description": "Returns a specific property of a course.",
                 "operationId": "getCourseInformation",
                 "parameters": [
                     {
@@ -1215,7 +1277,7 @@
                     {
                         "name": "property",
                         "in": "path",
-                        "description": "The Property of the course.",
+                        "description": "The property to retrieve.",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -1224,35 +1286,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of users retrieved successfully.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "properties": {
-                                            "user_id": {
-                                                "description": "The ID of the user.",
-                                                "type": "integer"
-                                            },
-                                            "login": {
-                                                "description": "The login name of the user.",
-                                                "type": "string"
-                                            },
-                                            "firstname": {
-                                                "description": "The first name of the user.",
-                                                "type": "string"
-                                            },
-                                            "lastname": {
-                                                "description": "The last name of the user.",
-                                                "type": "string"
-                                            }
-                                        },
-                                        "type": "object"
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Property retrieved successfully."
+                    },
+                    "404": {
+                        "description": "Course or property not found."
                     }
                 }
             }
@@ -1262,12 +1299,43 @@
                 "tags": [
                     "Course"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get course roles",
+                "description": "Returns a list of roles available in a specific course.",
                 "operationId": "getCourseRoles",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the course",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "obj_123": {
+                                            "type": "string",
+                                            "example": "Course Administrator"
+                                        },
+                                        "obj_124": {
+                                            "type": "string",
+                                            "example": "Course Member"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course not found"
                     }
                 }
             }
@@ -1307,12 +1375,41 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Update group",
+                "description": "Updates properties of a specific group.",
                 "operationId": "updateGroupByRefId",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Group data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            },
+                            "example": {
+                                "title": "New Group Title",
+                                "description": "Updated description"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Group updated successfully"
+                    },
+                    "404": {
+                        "description": "Group not found"
                     }
                 }
             }
@@ -1322,12 +1419,35 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get group property",
+                "description": "Returns a specific property of a group.",
                 "operationId": "getGroupInformation",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "property",
+                        "in": "path",
+                        "description": "The property to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Group or property not found"
                     }
                 }
             }
@@ -1337,12 +1457,44 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Add user to group",
+                "description": "Adds a user to a group with a specific role.",
                 "operationId": "addUser",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "default_role",
+                        "in": "path",
+                        "description": "The role to assign (e.g., admin, member)",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "User added successfully"
+                    },
+                    "404": {
+                        "description": "Group or user not found"
                     }
                 }
             }
@@ -1352,12 +1504,35 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Remove user from group",
+                "description": "Removes a user from a group.",
                 "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "User removed successfully"
+                    },
+                    "404": {
+                        "description": "Group or user enrollment not found"
                     }
                 }
             }
@@ -1367,12 +1542,26 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get all group users",
+                "description": "Returns a list of all users in a group.",
                 "operationId": "getAllUsers",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Group not found"
                     }
                 }
             }
@@ -1382,12 +1571,26 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get group admins",
+                "description": "Returns a list of all administrators in a group.",
                 "operationId": "getAllAdmins",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Group not found"
                     }
                 }
             }
@@ -1397,12 +1600,26 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get group members",
+                "description": "Returns a list of all members in a group.",
                 "operationId": "getAllMembers",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Group not found"
                     }
                 }
             }
@@ -1412,12 +1629,43 @@
                 "tags": [
                     "Group"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get group roles",
+                "description": "Returns a list of roles available in a group.",
                 "operationId": "getGroupRoles",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the group",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "obj_123": {
+                                            "type": "string",
+                                            "example": "Group Administrator"
+                                        },
+                                        "obj_124": {
+                                            "type": "string",
+                                            "example": "Group Member"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Group not found"
                     }
                 }
             }
@@ -1427,12 +1675,59 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get object information",
+                "description": "Returns basic information about a repository object.",
                 "operationId": "objectInformation",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "example": "My Course"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "A course description"
+                                        },
+                                        "object_id": {
+                                            "type": "integer",
+                                            "example": 1234
+                                        },
+                                        "ref_id": {
+                                            "type": "integer",
+                                            "example": 123
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "crs"
+                                        },
+                                        "owner_name": {
+                                            "type": "string",
+                                            "example": "Admin ILIAS"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             },
@@ -1440,12 +1735,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Delete object",
+                "description": "Deletes a repository object.",
                 "operationId": "deleteObject",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Object deleted successfully"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1455,12 +1764,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Check if object exists",
+                "description": "Checks if a repository object with the given reference ID exists.",
                 "operationId": "objectExists",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Object exists"
+                    },
+                    "404": {
+                        "description": "Object does not exist"
                     }
                 }
             }
@@ -1470,12 +1793,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get object type",
+                "description": "Returns the type of a repository object (e.g., crs, grp, fold).",
                 "operationId": "getObjectType",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1485,12 +1822,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get parent object",
+                "description": "Returns the parent reference ID of an object.",
                 "operationId": "getParent",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1500,12 +1851,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get child objects",
+                "description": "Returns a list of all children (sub-objects) of a repository object.",
                 "operationId": "getChildren",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1515,12 +1880,35 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Copy object",
+                "description": "Copies a repository object to a target location.",
                 "operationId": "copyObject",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object to copy",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "target_ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the target location",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Object copied successfully"
+                    },
+                    "404": {
+                        "description": "Source or target location not found"
                     }
                 }
             }
@@ -1530,12 +1918,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get advanced meta data",
+                "description": "Returns advanced meta data for a repository object.",
                 "operationId": "getAdvancedMetaData",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1545,12 +1947,26 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get learning history for users",
+                "description": "Returns the learning progress/history for all users in a repository object.",
                 "operationId": "getLearningHistoryUsers",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object not found"
                     }
                 }
             }
@@ -1560,12 +1976,35 @@
                 "tags": [
                     "Repository"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user learning history",
+                "description": "Returns the learning progress/history for a specific user in a repository object.",
                 "operationId": "getLearningHistoryByUserID",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the object",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Object or user not found"
                     }
                 }
             }
@@ -1575,12 +2014,63 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test by ID",
+                "description": "Returns detailed information for a specific test.",
                 "operationId": "getTestById",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "ref_id": {
+                                            "type": "integer",
+                                            "example": 789
+                                        },
+                                        "obj_id": {
+                                            "type": "integer",
+                                            "example": 12345
+                                        },
+                                        "test_id": {
+                                            "type": "integer",
+                                            "example": 10
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Final Exam"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Final exam for the course"
+                                        },
+                                        "offline_status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "owner": {
+                                            "type": "integer",
+                                            "example": 6
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1590,12 +2080,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test info",
+                "description": "Returns basic information and status for a specific test.",
                 "operationId": "getTestInfoById",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1605,12 +2109,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test general settings",
+                "description": "Returns general settings for a test.",
                 "operationId": "getTestSettingsGeneralById",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             },
@@ -1618,12 +2136,40 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Update test general settings",
+                "description": "Updates general settings for a test.",
                 "operationId": "updateTestSettingsGeneralById",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Settings data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            },
+                            "example": {
+                                "title": "Updated Test Title"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Settings updated successfully"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1633,12 +2179,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test grading system",
+                "description": "Returns the grading system settings for a test.",
                 "operationId": "getAllGradingByRefid",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             },
@@ -1646,12 +2206,40 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Update grading entries",
+                "description": "Updates multiple grading entries for a test.",
                 "operationId": "patchGrading",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "List of grading entries to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Grading entries updated successfully"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1661,12 +2249,35 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Delete grading entry",
+                "description": "Deletes a specific grading entry from the test.",
                 "operationId": "deleteGrading",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "short_name",
+                        "in": "path",
+                        "description": "The short name of the grading entry to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Grading entry deleted successfully"
+                    },
+                    "404": {
+                        "description": "Test or grading entry not found"
                     }
                 }
             }
@@ -1676,12 +2287,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Reset grading system",
+                "description": "Resets the test grading system to default values.",
                 "operationId": "resetGrading",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Grading system reset successfully"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1691,12 +2316,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test participants",
+                "description": "Returns a list of all participants for a specific test.",
                 "operationId": "getParticipants",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1706,12 +2345,26 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get all test results",
+                "description": "Returns the test results for all participants.",
                 "operationId": "getResults",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test not found"
                     }
                 }
             }
@@ -1721,12 +2374,35 @@
                 "tags": [
                     "Test"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get test results by user",
+                "description": "Returns the test results for a specific user.",
                 "operationId": "getResultsByUser",
+                "parameters": [
+                    {
+                        "name": "ref_id",
+                        "in": "path",
+                        "description": "The reference ID of the test",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Test or user result not found"
                     }
                 }
             }
@@ -1736,12 +2412,56 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user information",
+                "description": "Returns detailed information for a specific user.",
                 "operationId": "getUserInformation",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "usr_id": {
+                                            "type": "integer",
+                                            "example": 6
+                                        },
+                                        "login": {
+                                            "type": "string",
+                                            "example": "root"
+                                        },
+                                        "firstname": {
+                                            "type": "string",
+                                            "example": "Admin"
+                                        },
+                                        "lastname": {
+                                            "type": "string",
+                                            "example": "ILIAS"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "root@localhost"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             },
@@ -1749,12 +2469,26 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Delete user",
+                "description": "Deletes a specific user from the system.",
                 "operationId": "deleteUser",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             },
@@ -1762,12 +2496,42 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Update user",
+                "description": "Updates information for a specific user.",
                 "operationId": "updateUser",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "User data to update",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            },
+                            "example": {
+                                "firstname": "John",
+                                "lastname": "Doe",
+                                "email": "john.doe@example.com"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "User updated successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -1777,12 +2541,53 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user courses",
+                "description": "Returns a list of courses the user is enrolled in.",
                 "operationId": "getUserCourses",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ref_id": {
+                                                "type": "integer",
+                                                "example": 123
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Introduction to ILIAS"
+                                            },
+                                            "user_role": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "Member"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -1792,12 +2597,53 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user groups",
+                "description": "Returns a list of groups the user belongs to.",
                 "operationId": "getUserGroups",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "ref_id": {
+                                                "type": "integer",
+                                                "example": 456
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Study Group A"
+                                            },
+                                            "user_role": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string",
+                                                    "example": "Member"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -1807,12 +2653,43 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user roles",
+                "description": "Returns a list of roles assigned to the user.",
                 "operationId": "getUserRoles",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "2": {
+                                            "type": "string",
+                                            "example": "Guest"
+                                        },
+                                        "4": {
+                                            "type": "string",
+                                            "example": "User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -1822,12 +2699,35 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Add user role",
+                "description": "Assigns a specific role to a user.",
                 "operationId": "addUserRoleEntry",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "role_id",
+                        "in": "path",
+                        "description": "The ID of the role to assign",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Role assigned successfully"
+                    },
+                    "404": {
+                        "description": "User or role not found"
                     }
                 }
             },
@@ -1835,12 +2735,35 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Remove user role",
+                "description": "Removes a specific role from a user.",
                 "operationId": "deleteUserRoleEntry",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "role_id",
+                        "in": "path",
+                        "description": "The ID of the role to remove",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Role removed successfully"
+                    },
+                    "404": {
+                        "description": "User or role assignment not found"
                     }
                 }
             }
@@ -1850,12 +2773,43 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user custom fields",
+                "description": "Returns all custom user fields and their values for a specific user.",
                 "operationId": "getUserCustomFields",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "f_1": {
+                                            "type": "string",
+                                            "example": "Some value"
+                                        },
+                                        "f_2": {
+                                            "type": "string",
+                                            "example": "Another value"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             },
@@ -1863,12 +2817,40 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Set user custom fields",
+                "description": "Sets or updates custom field values for a user.",
                 "operationId": "setUserCustomFields",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Custom fields data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object"
+                            },
+                            "example": {
+                                "my_custom_field": "some value"
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                    "200": {
-                        "description": "Erfolgreiche Antwort"
+                    "201": {
+                        "description": "Custom fields updated successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -1878,12 +2860,35 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Get user custom field by name",
+                "description": "Returns the value of a specific custom field for a user.",
                 "operationId": "getUserCustomFieldsByCustomFieldName",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "customfield",
+                        "in": "path",
+                        "description": "The name of the custom field",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "User or custom field not found"
                     }
                 }
             }
@@ -1935,12 +2940,73 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Import users",
+                "description": "Imports multiple users from a JSON payload.",
                 "operationId": "userImport",
+                "requestBody": {
+                    "description": "List of users to import",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "properties": {
+                                        "login": {
+                                            "type": "string",
+                                            "example": "jdoe"
+                                        },
+                                        "passwd": {
+                                            "type": "string",
+                                            "example": "password123"
+                                        },
+                                        "firstname": {
+                                            "type": "string",
+                                            "example": "John"
+                                        },
+                                        "lastname": {
+                                            "type": "string",
+                                            "example": "Doe"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email",
+                                            "example": "john.doe@example.com"
+                                        },
+                                        "roles": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer",
+                                                "example": 4
+                                            }
+                                        },
+                                        "userdefineddata": {
+                                            "type": "object",
+                                            "example": {
+                                                "f_1": "Value"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Users imported successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "example": 124
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1950,12 +3016,67 @@
                 "tags": [
                     "User"
                 ],
-                "summary": "Description",
-                "description": "Description",
+                "summary": "Export user",
+                "description": "Exports user data for a specific user.",
                 "operationId": "userExport",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "The ID of the user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "Erfolgreiche Antwort"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "login": {
+                                                "type": "string",
+                                                "example": "jdoe"
+                                            },
+                                            "firstname": {
+                                                "type": "string",
+                                                "example": "John"
+                                            },
+                                            "lastname": {
+                                                "type": "string",
+                                                "example": "Doe"
+                                            },
+                                            "email": {
+                                                "type": "string",
+                                                "example": "john.doe@example.com"
+                                            },
+                                            "roles": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "integer",
+                                                    "example": 4
+                                                }
+                                            },
+                                            "userdefineddata": {
+                                                "type": "object",
+                                                "example": {
+                                                    "f_1": "Value"
+                                                }
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
                     }
                 }
             }
@@ -2971,12 +4092,18 @@
             }
         },
         "securitySchemes": {
-            "basic": {
+            "basicAuth": {
                 "type": "http",
-                "description": "The username and password to authenticate with the API."
+                "description": "Standard HTTP Basic Authentication using ILIAS credentials.",
+                "scheme": "basic"
             }
         }
     },
+    "security": [
+        {
+            "basicAuth": []
+        }
+    ],
     "tags": [
         {
             "name": "Category",

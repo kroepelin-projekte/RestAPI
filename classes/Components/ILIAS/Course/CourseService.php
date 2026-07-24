@@ -981,8 +981,8 @@ class CourseService extends BaseService
     #[OA\Get(
         path: "/ilias/course/{ref_id}/property/{property}",
         operationId: "getCourseInformation",
-        description: "DESCRIPTION",
-        summary: "DESCRIPTION",
+        description: "Returns a specific property of a course.",
+        summary: "Get specific course property",
         tags: ["Course"],
         parameters: [
             new OA\Parameter(
@@ -994,7 +994,7 @@ class CourseService extends BaseService
             ),
             new OA\Parameter(
                 name: "property",
-                description: "The Property of the course.",
+                description: "The property to retrieve.",
                 in: "path",
                 required: true,
                 schema: new OA\Schema(type: "string")
@@ -1003,37 +1003,14 @@ class CourseService extends BaseService
         responses: [
             new OA\Response(
                 response: 200,
-                description: "List of users retrieved successfully.",
-                content: new OA\JsonContent(
-                    type: "array",
-                    items: new OA\Items(
-                        properties: [
-                            new OA\Property(
-                                property: "user_id",
-                                description: "The ID of the user.",
-                                type: "integer"
-                            ),
-                            new OA\Property(
-                                property: "login",
-                                description: "The login name of the user.",
-                                type: "string"
-                            ),
-                            new OA\Property(
-                                property: "firstname",
-                                description: "The first name of the user.",
-                                type: "string"
-                            ),
-                            new OA\Property(
-                                property: "lastname",
-                                description: "The last name of the user.",
-                                type: "string"
-                            ),
-                        ],
-                        type: "object"
-                    )
-                )
+                description: "Property retrieved successfully."
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Course or property not found."
             )
-        ])]
+        ]
+    )]
     public function getCourseInformation(): void
     {
         $course_ref_id = $this->path_params->getValueByKey('ref_id');
@@ -1050,13 +1027,33 @@ class CourseService extends BaseService
     #[OA\Get(
         path: '/ilias/course/{ref_id}/roles',
         operationId: "getCourseRoles",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of roles available in a specific course.',
+        summary: 'Get course roles',
         tags: ["Course"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the course",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'obj_123', type: 'string', example: 'Course Administrator'),
+                        new OA\Property(property: 'obj_124', type: 'string', example: 'Course Member')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Course not found'
             )
         ]
     )]

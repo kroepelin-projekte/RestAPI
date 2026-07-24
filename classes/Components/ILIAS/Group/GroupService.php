@@ -82,13 +82,37 @@ class GroupService extends BaseService
     #[OA\Patch(
         path: '/ilias/group/{ref_id}',
         operationId: "updateGroupByRefId",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Updates properties of a specific group.',
+        summary: 'Update group',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            description: 'Group data to update',
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                example: [
+                    'title' => 'New Group Title',
+                    'description' => 'Updated description'
+                ]
+            )
+        ),
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Group updated successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group not found'
             )
         ]
     )]
@@ -103,13 +127,33 @@ class GroupService extends BaseService
     #[OA\GET(
         path: '/ilias/group/{ref_id}/property/{property}',
         operationId: "getGroupInformation",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a specific property of a group.',
+        summary: 'Get group property',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "property",
+                description: "The property to retrieve",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group or property not found'
             )
         ]
     )]
@@ -127,13 +171,40 @@ class GroupService extends BaseService
     #[OA\Put(
         path: '/ilias/group/{ref_id}/users/{user_id}/{default_role}',
         operationId: "addUser",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Adds a user to a group with a specific role.',
+        summary: 'Add user to group',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "default_role",
+                description: "The role to assign (e.g., admin, member)",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'User added successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group or user not found'
             )
         ]
     )]
@@ -150,13 +221,33 @@ class GroupService extends BaseService
     #[OA\DELETE(
         path: '/ilias/group/{ref_id}/users/{user_id}',
         operationId: "deleteUser",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Removes a user from a group.',
+        summary: 'Remove user from group',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            ),
+            new OA\Parameter(
+                name: "user_id",
+                description: "The ID of the user",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'User removed successfully'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group or user enrollment not found'
             )
         ]
     )]
@@ -174,13 +265,26 @@ class GroupService extends BaseService
     #[OA\GET(
         path: '/ilias/group/{ref_id}/users',
         operationId: "getAllUsers",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of all users in a group.',
+        summary: 'Get all group users',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group not found'
             )
         ]
     )]
@@ -196,13 +300,26 @@ class GroupService extends BaseService
     #[OA\GET(
         path: '/ilias/group/{ref_id}/admins',
         operationId: "getAllAdmins",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of all administrators in a group.',
+        summary: 'Get group admins',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group not found'
             )
         ]
     )]
@@ -218,13 +335,26 @@ class GroupService extends BaseService
     #[OA\GET(
         path: '/ilias/group/{ref_id}/members',
         operationId: "getAllMembers",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of all members in a group.',
+        summary: 'Get group members',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
-                response: 200,
-                description: 'Erfolgreiche Antwort'
+                response: 201,
+                description: 'Successful operation'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group not found'
             )
         ]
     )]
@@ -240,13 +370,33 @@ class GroupService extends BaseService
     #[OA\GET(
         path: '/ilias/group/{ref_id}/roles',
         operationId: "getGroupRoles",
-        description: 'Description',
-        summary: 'Description',
+        description: 'Returns a list of roles available in a group.',
+        summary: 'Get group roles',
         tags: ["Group"],
+        parameters: [
+            new OA\Parameter(
+                name: "ref_id",
+                description: "The reference ID of the group",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "integer")
+            )
+        ],
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Erfolgreiche Antwort'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'obj_123', type: 'string', example: 'Group Administrator'),
+                        new OA\Property(property: 'obj_124', type: 'string', example: 'Group Member')
+                    ],
+                    type: 'object'
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Group not found'
             )
         ]
     )]
