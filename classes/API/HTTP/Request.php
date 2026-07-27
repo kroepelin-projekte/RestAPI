@@ -33,8 +33,8 @@ class Request
         $requestedUriParts = explode('/', $requestedUri);
 
         $route_file = $this->baseDir . "/" . strtoupper($requestedUriParts[0]) . "/" . ucfirst(
-                $requestedUriParts[1]
-            ) . "/structure/" . ucfirst($requestedUriParts[1]) . "Routes.php";
+            $requestedUriParts[1]
+        ) . "/structure/" . ucfirst($requestedUriParts[1]) . "Routes.php";
 
         if (!file_exists($route_file)) {
             $reponse->send404();
@@ -51,10 +51,10 @@ class Request
                     }
                 }
                 $class = "KPG\\RestAPI\\Components\\" . strtoupper($requestedUriParts[0]) . "\\" . ucfirst(
-                        $requestedUriParts[1]
-                    ) . "\\" . ucfirst(
-                        $requestedUriParts[1]
-                    ) . "Service";
+                    $requestedUriParts[1]
+                ) . "\\" . ucfirst(
+                    $requestedUriParts[1]
+                ) . "Service";
 
                 if (!$class) {
                     $reponse->send500();
@@ -62,20 +62,27 @@ class Request
                 global $DIC;
                 $user_id = $DIC->user()->getId();
                 if (!$auth->checkComponentPermission(
-                        $user_id, ucfirst($requestedUriParts[1]), $route['http_method']
-                    ) && !$auth->checkFullAccessPermission($user_id)) {
+                    $user_id,
+                    ucfirst($requestedUriParts[1]),
+                    $route['http_method']
+                ) && !$auth->checkFullAccessPermission($user_id)) {
                     $reponse->send404();
                 }
 
                 $request_body = [];
-                if (array_key_exists('CONTENT_TYPE', $_SERVER)) {
-                    $request_body = (array) json_decode(file_get_contents('php://input'), true);
-                    if (json_last_error() != JSON_ERROR_NONE) {
+                $raw_input = file_get_contents('php://input');
+                if (!empty($raw_input)) {
+                    $decoded_body = json_decode($raw_input, true);
+
+                    if (json_last_error() !== JSON_ERROR_NONE) {
                         $reponse->setResponseCode(400);
                         $reponse->setError('INVALID_JSON_BODY');
                         $reponse->send();
+                        return;
                     }
+                    $request_body = (array) $decoded_body;
                 }
+
                 Logger::setRequestBody(json_encode($request_body));
 
                 $request_data = [
