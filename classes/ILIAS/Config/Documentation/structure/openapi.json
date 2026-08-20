@@ -1963,7 +1963,38 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "additionalProperties": {
+                                        "properties": {
+                                            "status": {
+                                                "type": "string",
+                                                "example": "completed"
+                                            },
+                                            "timestamp": {
+                                                "type": "integer",
+                                                "example": 1787233680,
+                                                "nullable": true
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "example": {
+                                    "6": {
+                                        "status": "completed",
+                                        "timestamp": 1787233680
+                                    },
+                                    "12": {
+                                        "status": "in_progress",
+                                        "timestamp": 1787147280
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Object not found"
@@ -2001,7 +2032,25 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "completed"
+                                        },
+                                        "timestamp": {
+                                            "type": "integer",
+                                            "example": 1787233680,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Object or user not found"

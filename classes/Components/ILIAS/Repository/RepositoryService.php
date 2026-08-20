@@ -208,7 +208,8 @@ class RepositoryService extends BaseService
     {
         $handler = new RepositoryHandler();
         $this->response->setResponseCode(200);
-        $this->response->setResponseData(["parent" => $handler->getParent($this->path_params->getValueByKey('ref_id'))]
+        $this->response->setResponseData(
+            ["parent" => $handler->getParent($this->path_params->getValueByKey('ref_id'))]
         );
         $this->response->send();
     }
@@ -351,7 +352,27 @@ class RepositoryService extends BaseService
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Successful operation'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    additionalProperties: new OA\AdditionalProperties(
+                        properties: [
+                            new OA\Property(property: 'status', type: 'string', example: 'completed'),
+                            new OA\Property(property: 'timestamp', type: 'integer', nullable: true, example: 1787233680)
+                        ],
+                        type: 'object'
+                    ),
+                    example: [
+                        '6' => [
+                            'status' => 'completed',
+                            'timestamp' => 1787233680
+                        ],
+                        '12' => [
+                            'status' => 'in_progress',
+                            'timestamp' => 1787147280
+                        ]
+                    ]
+                )
             ),
             new OA\Response(
                 response: 404,
@@ -393,7 +414,14 @@ class RepositoryService extends BaseService
         responses: [
             new OA\Response(
                 response: 200,
-                description: 'Successful operation'
+                description: 'Successful operation',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'completed'),
+                        new OA\Property(property: 'timestamp', type: 'integer', nullable: true, example: 1787233680)
+                    ],
+                    type: 'object'
+                )
             ),
             new OA\Response(
                 response: 404,
@@ -408,7 +436,7 @@ class RepositoryService extends BaseService
 
         $lp_handler = new RepositoryLPHandler();
 
-        $this->response->setResponseData(['status' => $lp_handler->getLPByRefIDAndUserID($obj_ref_id, $user_id)]);
+        $this->response->setResponseData($lp_handler->getLPByRefIDAndUserID($obj_ref_id, $user_id));
         $this->response->setResponseCode(200);
         $this->response->send();
     }
