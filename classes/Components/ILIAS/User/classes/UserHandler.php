@@ -323,6 +323,8 @@ class UserHandler
         $new_user->setDescription('');
         $new_user->setEmail($email);
         $new_user->setLogin($username);
+        $new_user->setFirstname($firstname);
+        $new_user->setLastname($lastname);
         $new_user->setLanguage($lang_key);
         $generated_password = substr(md5(uniqid(rand(), true)), 0, 14);
         $new_user->setPasswd($generated_password);
