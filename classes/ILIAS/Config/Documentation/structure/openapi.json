@@ -818,6 +818,48 @@
                 }
             }
         },
+        "/ilias/course/{ref_id}/exists": {
+            "get": {
+                "tags": [
+                    "Course"
+                ],
+                "summary": "Checks if a course exists and returns its offline and trash status.",
+                "description": "Checks if a course with the given ref_id exists. Returns 200 with the offline and trash status if it exists, 404 if not.",
+                "operationId": "courseExists",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/RefIDParamater"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": {
+                                    "status_code": 200,
+                                    "error_code": "",
+                                    "response_data": {
+                                        "ref_id": 123,
+                                        "obj_id": 456,
+                                        "title": "Example course",
+                                        "offline": false,
+                                        "in_trash": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Course does not exist"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthFailedResponse"
+                    }
+                }
+            }
+        },
         "/ilias/course/{ref_id}/users/{user_id}/{default_role}": {
             "put": {
                 "tags": [

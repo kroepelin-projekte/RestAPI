@@ -79,10 +79,16 @@ class Authenticator
                 return true;
             }
 
-            if ($component_name === 'User' && $http_method === 'GET' && in_array('GET_EXISTS', $permissions)) {
-                $requestedUri = urldecode(explode('?', $_SERVER['REQUEST_URI'])[0]);
-                if (preg_match('#/api/ilias/user/[^/]+/exists$#', $requestedUri)) {
-                    return true;
+            if ($http_method === 'GET' && in_array('GET_EXISTS', $permissions)) {
+                $exists_routes = [
+                    'User' => '#/api/ilias/user/[^/]+/exists$#',
+                    'Course' => '#/api/ilias/course/[^/]+/exists$#',
+                ];
+                if (isset($exists_routes[$component_name])) {
+                    $requestedUri = urldecode(explode('?', $_SERVER['REQUEST_URI'])[0]);
+                    if (preg_match($exists_routes[$component_name], $requestedUri)) {
+                        return true;
+                    }
                 }
             }
         }

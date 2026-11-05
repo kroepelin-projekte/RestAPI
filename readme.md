@@ -166,7 +166,7 @@ Access is controlled via the Plugin Configuration in the ILIAS Administration:
    - **Custom:** Role has access to specific components and methods (configured in Step 2).
    - **Full Permission:** Role has access to all endpoints and methods.
 3. **Step 2: Role Permissions:** If "Custom" was selected, you can define the allowed HTTP methods (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`, etc.) for each component (e.g., `User`, `Course`) specifically for that role.
-   - *Note:* For the `User` component, there is an additional `GET_EXISTS` permission to only allow checking if a user exists without fetching full data.
+   - *Note:* For the `User` and `Course` components, there is an additional `GET_EXISTS` permission to only allow checking if a user (`/ilias/user/{user_identifier}/exists`) or a course (`/ilias/course/{ref_id}/exists`) exists without fetching full data. The course endpoint additionally returns whether the course is offline (`offline`) and whether it is in the trash (`in_trash`).
 
 ### API Calls
 

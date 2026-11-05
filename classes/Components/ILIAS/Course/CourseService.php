@@ -79,6 +79,53 @@ class CourseService extends BaseService
         $this->response->send();
     }
 
+    #[OA\Get(
+        path: "/ilias/course/{ref_id}/exists",
+        operationId: "courseExists",
+        description: "Checks if a course with the given ref_id exists. Returns 200 with the offline and trash status if it exists, 404 if not.",
+        summary: "Checks if a course exists and returns its offline and trash status.",
+        tags: ["Course"],
+        parameters: [
+            new OA\Parameter(ref: "#/components/parameters/RefIDParamater"),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Course exists",
+                content: new OA\JsonContent(
+                    example: [
+                        'status_code' => 200,
+                        'error_code' => '',
+                        'response_data' => [
+                            'ref_id' => 123,
+                            'obj_id' => 456,
+                            'title' => 'Example course',
+                            'offline' => false,
+                            'in_trash' => false,
+                        ],
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 404,
+                description: "Course does not exist"
+            ),
+            new OA\Response(ref: "#/components/responses/AuthFailedResponse", response: 401),
+        ]
+    )]
+    public function courseExists(): void
+    {
+        $ref_id = (int) $this->path_params->getValueByKey('ref_id');
+        $status = (new CourseHandler())->getCourseExistsStatus($ref_id);
+        if ($status === null) {
+            $this->response->setResponseCode(404);
+        } else {
+            $this->response->setResponseData($status);
+            $this->response->setResponseCode(200);
+        }
+        $this->response->send();
+    }
+
     #[OA\Patch(
         path: "/ilias/course/{ref_id}",
         operationId: "updateCourseByRefId",
