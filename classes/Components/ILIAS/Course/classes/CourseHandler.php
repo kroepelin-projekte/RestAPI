@@ -129,6 +129,31 @@ class CourseHandler
         $obj_course->update();
     }
 
+    /**
+     * Returns the existence, offline and trash status of a course.
+     *
+     * The offline status is read from the central object properties (object_data.offline),
+     * which replaced the legacy crs_settings.activation_type.
+     *
+     * @return array|null null if no course with the given ref_id exists
+     */
+    public function getCourseExistsStatus(int $ref_id): ?array
+    {
+        if (!$this->utilHandler->courseExists($ref_id)) {
+            return null;
+        }
+
+        $obj_id = \ilObject::_lookupObjId($ref_id);
+
+        return [
+            'ref_id' => $ref_id,
+            'obj_id' => $obj_id,
+            'title' => \ilObject::_lookupTitle($obj_id),
+            'offline' => \ilObject::lookupOfflineStatus($obj_id),
+            'in_trash' => \ilObject::_isInTrash($ref_id),
+        ];
+    }
+
     public function deleteCourse(int $ref_id): array
     {
         if (!$this->utilHandler->courseExists($ref_id)) {

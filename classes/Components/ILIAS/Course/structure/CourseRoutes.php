@@ -21,53 +21,59 @@ $routes = array (
   ),
   3 => 
   array (
+    'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/exists$/',
+    'http_method' => 'GET',
+    'method' => 'courseExists',
+  ),
+  4 => 
+  array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_id>[^\\/]+)\\/(?P<default_role>[^\\/]+)$/',
     'http_method' => 'PUT',
     'method' => 'addUser',
   ),
-  4 => 
+  5 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users$/',
     'http_method' => 'GET',
     'method' => 'getAllUsers',
   ),
-  5 => 
+  6 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/members$/',
     'http_method' => 'GET',
     'method' => 'getAllMembers',
   ),
-  6 => 
+  7 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/tutors$/',
     'http_method' => 'GET',
     'method' => 'getAllTutors',
   ),
-  7 => 
+  8 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/admin$/',
     'http_method' => 'GET',
     'method' => 'getAllAdmin',
   ),
-  8 => 
+  9 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_identifier>[^\\/]+)$/',
     'http_method' => 'PUT',
     'method' => 'addMember',
   ),
-  9 => 
+  10 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/users\\/(?P<user_identifier>[^\\/]+)$/',
     'http_method' => 'DELETE',
     'method' => 'deleteUser',
   ),
-  10 => 
+  11 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/property\\/(?P<property>[^\\/]+)$/',
     'http_method' => 'GET',
     'method' => 'getCourseInformation',
   ),
-  11 => 
+  12 => 
   array (
     'route' => '/^\\/ilias\\/course\\/(?P<ref_id>[^\\/]+)\\/roles$/',
     'http_method' => 'GET',

@@ -19,4 +19,5 @@ lang_developer_documentation#:#Entwickler Dokumentation
 lang_role_permission#:#Rollenberechtigung
 lang_component_permission#:#Komponentenberechtigung
 lang_user_exists_only#:#Erlaube /ilias/user/exists
+lang_course_exists_only#:#Erlaube /ilias/course/exists
 lang_new_user_email#:#Ihre Zugangsdaten lauten:\n\nLogin: %s\nPasswort: %s

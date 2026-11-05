@@ -25,4 +25,5 @@ interface LangConstant
     public const LANG_ROLE_PERMISSION = "lang_role_permission";
     public const LANG_COMPONENT_PERMISSION = "lang_component_permission";
     public const LANG_USER_EXISTS_ONLY = "lang_user_exists_only";
+    public const LANG_COURSE_EXISTS_ONLY = "lang_course_exists_only";
 }

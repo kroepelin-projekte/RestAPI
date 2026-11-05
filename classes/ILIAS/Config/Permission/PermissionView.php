@@ -85,6 +85,9 @@ class PermissionView implements LangConstant, CMDConstant
                 if ($name === 'User') {
                     $options['GET_EXISTS'] = self::getLang(self::LANG_USER_EXISTS_ONLY);
                 }
+                if ($name === 'Course') {
+                    $options['GET_EXISTS'] = self::getLang(self::LANG_COURSE_EXISTS_ONLY);
+                }
                 $multi_select = $this->ui->input()->field()->multiSelect($role['title'], $options)->withAdditionalOnLoadCode(
                     fn($id) => <<<JS
                 (function() {
