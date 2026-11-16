@@ -29,14 +29,32 @@ class GroupUserHandler
         switch ($group_default_role) {
             case 'admin':
                 $role_id = $obj_group->getDefaultAdminRole();
+                $participant_role = \ilParticipants::IL_GRP_ADMIN;
                 break;
             case 'member':
                 $role_id = $obj_group->getDefaultMemberRole();
+                $participant_role = \ilParticipants::IL_GRP_MEMBER;
                 break;
             default:
                 throw new DefaultRoleNotFoundException();
         }
-        $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+        $this->addParticipant($obj_group, $user_id, $participant_role, $role_id);
+    }
+
+    private function addParticipant(\ilObjGroup $obj_group, int $user_id, int $participant_role, int $role_id): void
+    {
+        $participants = $obj_group->getMembersObject();
+
+        if ($participants->isAssigned($user_id)) {
+            $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+            return;
+        }
+
+        $participants->add($user_id, $participant_role);
+        $participants->sendNotification(
+            \ilGroupMembershipMailNotification::TYPE_ADMISSION_MEMBER,
+            $user_id
+        );
     }
 
     public function deleteUser(int $user_id, int $group_ref_id): void

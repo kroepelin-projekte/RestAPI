@@ -30,17 +30,20 @@ class CourseUserHandler
         switch ($course_default_role) {
             case 'admin':
                 $role_id = $obj_course->getDefaultAdminRole();
+                $participant_role = \ilParticipants::IL_CRS_ADMIN;
                 break;
             case 'tutor':
                 $role_id = $obj_course->getDefaultTutorRole();
+                $participant_role = \ilParticipants::IL_CRS_TUTOR;
                 break;
             case 'member':
                 $role_id = $obj_course->getDefaultMemberRole();
+                $participant_role = \ilParticipants::IL_CRS_MEMBER;
                 break;
             default:
                 throw new DefaultRoleNotFoundException();
         }
-        $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+        $this->addParticipant($obj_course, $user_id, $participant_role, $role_id);
     }
 
     public function addMember(int|string $user_identifier, int $course_ref_id): void
@@ -58,8 +61,29 @@ class CourseUserHandler
             throw new UserNotFoundException();
         }
         $obj_course = new \ilObjCourse($course_ref_id, true);
-        $role_id = $obj_course->getDefaultMemberRole();
-        $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+        $this->addParticipant(
+            $obj_course,
+            $user_id,
+            \ilParticipants::IL_CRS_MEMBER,
+            $obj_course->getDefaultMemberRole()
+        );
+    }
+
+    private function addParticipant(\ilObjCourse $obj_course, int $user_id, int $participant_role, int $role_id): void
+    {
+        $participants = $obj_course->getMembersObject();
+
+        if ($participants->isAssigned($user_id)) {
+            $this->DIC->rbac()->admin()->assignUser($role_id, $user_id);
+            return;
+        }
+
+        $participants->add($user_id, $participant_role);
+        $participants->sendNotification(
+            \ilCourseMembershipMailNotification::TYPE_ADMISSION_MEMBER,
+            $user_id
+        );
+        $obj_course->checkLPStatusSync($user_id);
     }
 
     public function getAllUsers(int $course_ref_id, $default_role = null)
